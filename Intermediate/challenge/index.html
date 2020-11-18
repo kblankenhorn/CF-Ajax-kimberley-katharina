@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <title>AJAX Challenge</title>
+</head>
+<body>
+    <h1>Registration Form</h1>
+    <form>
+        <input type="text" id="compareUsers" name="compareUsers">
+        
+    </form>
+   <p id="result"></p>
+    <br>
+    <br>
+    
+
+    <script>
+        var request;
+        $("#compareUsers").keyup(function(event){
+            event.preventDefault();
+            if(request){
+                request.abort();
+            }
+            var form = $(this);
+            var inputs = form.find("input, select, button, textarea");
+            var serializedData = form.serialize();
+            inputs.prop("disabled", true);
+            request = $.ajax({
+                url: "usernames.php",
+                type: "post",
+                data: serializedData
+            });
+
+            request.done(function(response, textStatus, jqXHR){
+                console.log(response);
+            });
+
+            request.fail(function(jqXHR, textStatus, errorThrown){
+                console.error(
+                    "The following error occurred: " + textStatus, errorThrown
+                );
+            });
+
+            request.always(function(){
+                inputs.prop("disabled", false);
+            });
+        });
+    </script>
+
+
+    
+</body>
+</html>
